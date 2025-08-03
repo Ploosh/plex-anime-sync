@@ -28,7 +28,7 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies()
   const defaultOpen = cookieStore.get(SIDEBAR_COOKIE_NAME)?.value === "true"
- 
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -41,7 +41,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
         <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
+          <AppSidebar  />
           <SidebarTrigger />
           {children}
         </SidebarProvider>

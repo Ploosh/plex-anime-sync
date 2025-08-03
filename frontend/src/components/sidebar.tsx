@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Sidebar,
   SidebarContent,
@@ -7,9 +9,11 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  useSidebar
 } from "@/components/ui/sidebar"
 import { Home, Logs, Settings } from "lucide-react"
+import { AccountDropdown } from "./account-dropdown"
 import { ModeToggle } from "./mode-toggle"
 
 const items = [
@@ -19,20 +23,21 @@ const items = [
     icon: Home,
   },
   {
+    title: "Integrations",
+    url: "#",
+    icon: Logs,
+  },
+  {
     title: "Settings",
     url: "#",
     icon: Settings,
-  },
-  {
-    title: "Logs",
-    url: "#",
-    icon: Logs,
   },
 ]
 
 export const SIDEBAR_COOKIE_NAME = "sidebar_state"
 
 export function AppSidebar() {
+  const { open, openMobile } = useSidebar()
   return (
     <Sidebar collapsible="icon" >
       <SidebarContent>
@@ -56,7 +61,10 @@ export function AppSidebar() {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter>
-        <ModeToggle />
+        <div className="flex items-center justify-between">
+          {(open || openMobile) && <AccountDropdown />}
+          <ModeToggle />
+        </div>
       </SidebarFooter>
     </Sidebar>
   )
