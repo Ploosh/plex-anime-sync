@@ -2,6 +2,7 @@ from typing import Annotated, cast
 
 from fastapi import Depends
 from plexapi.base import MediaContainer
+from plexapi.library import ShowSection
 from plexapi.server import PlexServer
 from plexapi.video import EpisodeHistory
 
@@ -15,9 +16,30 @@ def get_plex_server(config: AppConfig):
 PlexClient = Annotated[PlexServer, Depends(get_plex_server)]
 
 
+def get_animes(plex: PlexClient):
+    """
+    Fetches all anime from the Plex server.
+    """
+    animes = cast(ShowSection, plex.library.section("Anime"))
+    if not animes:
+        return []
+
+    return [
+        {
+            "title": anime.title,
+            "key": anime.key,
+            "ratingKey": anime.ratingKey,
+            "summary": anime.summary,
+            "year": anime.year,
+        }
+        for anime in animes.all()
+    ]
+
+
 def get_recently_watched(plex: PlexClient):
     history: MediaContainer[EpisodeHistory] = cast(
-        MediaContainer[EpisodeHistory], plex.history()
+        MediaContainer[EpisodeHistory],
+        plex.history(librarySectionID=plex.library.section("Anime").key),
     )
     if not history:
         return []
@@ -25,7 +47,7 @@ def get_recently_watched(plex: PlexClient):
     watched = {}
 
     for item in history:
-        key = item.grandparentTitle if hasattr(item, "grandparentTitle") else item.title
+        key = item.key
         if not key:
             continue
         found = watched.get(key)
