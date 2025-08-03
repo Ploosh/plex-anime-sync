@@ -1,4 +1,5 @@
 import { AppSidebar, SIDEBAR_COOKIE_NAME } from "@/components/sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -29,15 +30,22 @@ export default async function RootLayout({
   const defaultOpen = cookieStore.get(SIDEBAR_COOKIE_NAME)?.value === "true"
  
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <SidebarProvider defaultOpen={defaultOpen}>
           <AppSidebar />
           <SidebarTrigger />
           {children}
         </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar"
 import { Home, Logs, Settings } from "lucide-react"
+import { ModeToggle } from "./mode-toggle"
 
 const items = [
   {
@@ -54,7 +55,9 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <ModeToggle />
+      </SidebarFooter>
     </Sidebar>
   )
 }
